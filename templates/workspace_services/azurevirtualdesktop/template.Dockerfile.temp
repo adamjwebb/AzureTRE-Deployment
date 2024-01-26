@@ -1,0 +1,20 @@
+# syntax=docker/dockerfile-upstream:1.4.0
+FROM debian:bullseye-slim
+
+# PORTER_INIT
+
+RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
+
+# PORTER_MIXINS
+
+# Use the BUNDLE_DIR build argument to copy files into the bundle
+
+ARG BUNDLE_DIR
+
+COPY . $BUNDLE_DIR
+
+WORKDIR $BUNDLE_DIR
+
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
+
+RUN az bicep build --file ./bicep/main.bicep --outfile main.json
