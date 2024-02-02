@@ -2,7 +2,6 @@
 FROM debian:bullseye-slim
 
 # PORTER_INIT
-RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
 
 # PORTER_MIXINS
 
