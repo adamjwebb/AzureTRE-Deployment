@@ -1,56 +1,44 @@
-# Create AVD workspace
-resource "azurerm_virtual_desktop_workspace" "avd_workspace" {
-  name                          = local.avd_workspace_name
-  resource_group_name           = data.azurerm_resource_group.ws.name
-  location                      = data.azurerm_resource_group.ws.location
-  friendly_name                 = var.avd_workspace_display_name
-  description                   = var.avd_workspace_description
-  public_network_access_enabled = true
-  tags                          = local.tre_workspace_service_tags
+# Azure Provider source and version being used
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "=3.86.0"
+    }
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = "=2.20.0"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "=3.4.3"
+    }
+  }
 
-  lifecycle { ignore_changes = [tags] }
+  backend "azurerm" {}
 }
 
-# Create AVD host pool
-resource "azurerm_virtual_desktop_host_pool" "avd_hostpool" {
-  name                     = local.avd_hostpool_name
-  resource_group_name      = data.azurerm_resource_group.ws.name
-  location                 = data.azurerm_resource_group.ws.location
-  friendly_name            = var.avd_hostpool_display_name
-  description              = var.avd_hostpool_description
-  validate_environment     = false
-  start_vm_on_connect      = false
-  custom_rdp_properties    = "audiocapturemode:i:1;audiomode:i:0;enablerdsaadauth:i:1;targetisaadjoined:i:1;"
-  type                     = "Pooled"
-  maximum_sessions_allowed = 16
-  load_balancer_type       = "DepthFirst" #[BreadthFirst DepthFirst]
-  tags                     = local.tre_workspace_service_tags
-
-  lifecycle { ignore_changes = [tags] }
+provider "azurerm" {
+  features {
+    key_vault {
+      # Don't purge on destroy (this would fail due to purge protection being enabled on keyvault)
+      purge_soft_delete_on_destroy               = false
+      purge_soft_deleted_secrets_on_destroy      = false
+      purge_soft_deleted_certificates_on_destroy = false
+      purge_soft_deleted_keys_on_destroy         = false
+      # When recreating an environment, recover any previously soft deleted secrets - set to true by default
+      recover_soft_deleted_key_vaults   = true
+      recover_soft_deleted_secrets      = true
+      recover_soft_deleted_certificates = true
+      recover_soft_deleted_keys         = true
+    }
+  }
 }
 
-# Set registration information for AVD host pool
-resource "azurerm_virtual_desktop_host_pool_registration_info" "avd_hostpool_registrationinfo" {
-  hostpool_id     = azurerm_virtual_desktop_host_pool.avd_hostpool.id
-  expiration_date = local.avd_hostpool_registrationinfo_expiration_date
+/*
+provider "azuread" {
+  client_id     = var.auth_client_id
+  client_secret = var.auth_client_secret
+  tenant_id     = var.auth_tenant_id
 }
-
-# Create AVD DAG
-resource "azurerm_virtual_desktop_application_group" "avd_application_group" {
-  name                = local.avd_application_group_name
-  resource_group_name = data.azurerm_resource_group.ws.name
-  location            = data.azurerm_resource_group.ws.location
-  friendly_name       = var.avd_application_group_display_name
-  description         = var.avd_application_group_description
-  host_pool_id        = azurerm_virtual_desktop_host_pool.avd_hostpool.id
-  type                = "Desktop"
-  tags                = local.tre_workspace_service_tags
-
-  lifecycle { ignore_changes = [tags] }
-}
-
-# Associate Workspace and DAG
-resource "azurerm_virtual_desktop_workspace_application_group_association" "avd_application_group_association" {
-  application_group_id = azurerm_virtual_desktop_application_group.avd_application_group.id
-  workspace_id         = azurerm_virtual_desktop_workspace.avd_workspace.id
-}
+*/

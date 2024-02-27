@@ -22,16 +22,12 @@ data "azurerm_key_vault" "ws" {
   resource_group_name = data.azurerm_resource_group.ws.name
 }
 
-data "azurerm_linux_web_app" "guacamole" {
-  name                = "guacamole-${var.tre_id}-ws-${local.short_workspace_id}-svc-${local.short_parent_id}"
+data "azurerm_virtual_desktop_host_pool" "avdhostpool" {
+  name = local.avd_hostpool_name
   resource_group_name = data.azurerm_resource_group.ws.name
 }
 
-data "azurerm_public_ip" "app_gateway_ip" {
-  name                = "pip-agw-${var.tre_id}"
-  resource_group_name = data.azurerm_resource_group.core.name
-}
-
+/*
 data "azurerm_storage_account" "stg" {
   name                = local.storage_name
   resource_group_name = data.azurerm_resource_group.ws.name
@@ -42,3 +38,36 @@ data "azurerm_storage_share" "shared_storage" {
   name                 = var.shared_storage_name
   storage_account_name = data.azurerm_storage_account.stg.name
 }
+
+data "azurerm_log_analytics_workspace" "oms-workspace" {
+  name                = local.law_name
+  resource_group_name = data.azurerm_resource_group.core.name
+}
+
+data "azurerm_role_definition" "desktop_virtualization_user" {
+  name = "Desktop Virtualization User"
+}
+
+data "azurerm_role_definition" "virtual_machine_user_login" {
+  name = "Virtual Machine User Login"
+}
+
+data "azurerm_role_definition" "virtual_machine_admin_login" {
+  name = "Virtual Machine Administrator Login"
+}
+/*
+data "azuread_group" "workspace_owners" {
+  display_name     = "${local.workspace_resource_name_suffix} Workspace Owners"
+  security_enabled = true
+}
+
+data "azuread_group" "workspace_researchers" {
+  display_name     = "${local.workspace_resource_name_suffix} Workspace Researchers"
+  security_enabled = true
+}
+
+data "azuread_group" "workspace_airlock_managers" {
+  display_name     = "${local.workspace_resource_name_suffix} Airlock Managers"
+  security_enabled = true
+}
+*/

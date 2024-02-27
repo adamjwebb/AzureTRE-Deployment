@@ -2,9 +2,19 @@ data "azurerm_resource_group" "ws" {
   name = "rg-${var.tre_id}-ws-${local.short_workspace_id}"
 }
 
+data "azurerm_resource_group" "core" {
+  name = "rg-${var.tre_id}"
+}
+
 data "azurerm_virtual_network" "ws" {
   name                = "vnet-${var.tre_id}-ws-${local.short_workspace_id}"
-  resource_group_name = "rg-${var.tre_id}-ws-${local.short_workspace_id}"
+  resource_group_name = data.azurerm_resource_group.ws.name
+}
+
+data "azurerm_subnet" "services" {
+  name                 = "ServicesSubnet"
+  virtual_network_name = data.azurerm_virtual_network.ws.name
+  resource_group_name  = data.azurerm_resource_group.ws.name
 }
 
 data "azurerm_key_vault" "ws" {
@@ -12,24 +22,46 @@ data "azurerm_key_vault" "ws" {
   resource_group_name = data.azurerm_resource_group.ws.name
 }
 /*
-data "azurerm_key_vault_secret" "aad_tenant_id" {
-  name         = "auth-tenant-id"
-  key_vault_id = data.azurerm_key_vault.ws.id
-}*/
+data "azurerm_storage_account" "stg" {
+  name                = local.storage_name
+  resource_group_name = data.azurerm_resource_group.ws.name
+}
 
-data "azurerm_subnet" "services" {
-  name                 = "ServicesSubnet"
-  virtual_network_name = data.azurerm_virtual_network.ws.name
-  resource_group_name  = data.azurerm_resource_group.ws.name
+data "azurerm_storage_share" "shared_storage" {
+  count                = var.shared_storage_access ? 1 : 0
+  name                 = var.shared_storage_name
+  storage_account_name = data.azurerm_storage_account.stg.name
+}
+
+data "azurerm_log_analytics_workspace" "oms-workspace" {
+  name                = local.law_name
+  resource_group_name = data.azurerm_resource_group.core.name
+}
+
+data "azurerm_role_definition" "desktop_virtualization_user" {
+  name = "Desktop Virtualization User"
+}
+
+data "azurerm_role_definition" "virtual_machine_user_login" {
+  name = "Virtual Machine User Login"
+}
+
+data "azurerm_role_definition" "virtual_machine_admin_login" {
+  name = "Virtual Machine Administrator Login"
 }
 /*
-data "azurerm_private_dns_zone" "health" {
-  name                = module.terraform_azurerm_environment_configuration.private_links["privatelink.azurehealthcareapis.com"]
-  resource_group_name = local.core_resource_group_name
+data "azuread_group" "workspace_owners" {
+  display_name     = "${local.workspace_resource_name_suffix} Workspace Owners"
+  security_enabled = true
 }
 
-data "azurerm_private_dns_zone" "dicom" {
-  name                = module.terraform_azurerm_environment_configuration.private_links["privatelink.dicom.azurehealthcareapis.com"]
-  resource_group_name = local.core_resource_group_name
+data "azuread_group" "workspace_researchers" {
+  display_name     = "${local.workspace_resource_name_suffix} Workspace Researchers"
+  security_enabled = true
+}
+
+data "azuread_group" "workspace_airlock_managers" {
+  display_name     = "${local.workspace_resource_name_suffix} Airlock Managers"
+  security_enabled = true
 }
 */

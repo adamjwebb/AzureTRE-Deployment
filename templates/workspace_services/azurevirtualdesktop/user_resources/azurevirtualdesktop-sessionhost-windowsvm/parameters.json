@@ -2,24 +2,24 @@
   "schemaType": "ParameterSet",
   "schemaVersion": "1.0.1",
   "namespace": "",
-  "name": "tre-service-guacamole-windowsvm",
+  "name": "tre-service-avd",
   "parameters": [
-    {
-      "name": "workspace_id",
-      "source": {
-        "env": "WORKSPACE_ID"
-      }
-    },
-    {
-      "name": "parent_service_id",
-      "source": {
-        "env": "PARENT_SERVICE_ID"
-      }
-    },
     {
       "name": "tre_id",
       "source": {
         "env": "TRE_ID"
+      }
+    },
+    {
+      "name": "id",
+      "source": {
+        "env": "ID"
+      }
+    },
+    {
+      "name": "workspace_id",
+      "source": {
+        "env": "WORKSPACE_ID"
       }
     },
     {
@@ -41,9 +41,15 @@
       }
     },
     {
-      "name": "id",
+      "name": "arm_environment",
       "source": {
-        "env": "ID"
+        "env": "ARM_ENVIRONMENT"
+      }
+    },
+    {
+      "name": "azure_environment",
+      "source": {
+        "env": "AZURE_ENVIRONMENT"
       }
     },
     {
@@ -71,21 +77,21 @@
       }
     },
     {
+      "name": "vm_users_object_id",
+      "source": {
+        "env": "VM_USERS_OBJECT_ID"
+      }
+    },
+    {
       "name": "image_gallery_id",
       "source": {
         "env": "IMAGE_GALLERY_ID"
       }
     },
     {
-      "name": "azure_environment",
+      "name": "use_core_app_gateway",
       "source": {
-        "env": "AZURE_ENVIRONMENT"
-      }
-    },
-    {
-      "name": "arm_environment",
-      "source": {
-        "env": "ARM_ENVIRONMENT"
+        "env": "USE_CORE_APP_GATEWAY"
       }
     }
   ]

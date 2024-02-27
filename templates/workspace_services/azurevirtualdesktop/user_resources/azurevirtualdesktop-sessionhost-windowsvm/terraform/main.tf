@@ -1,61 +1,43 @@
-resource "azurerm_network_interface" "avd_sessionhost_nic" {
-  name                          = "${local.avd_sessionhost_name}-nic"
-  resource_group_name           = data.azurerm_resource_group.ws.name
-  location                      = data.azurerm_resource_group.ws.location
-
-  ip_configuration {
-    name                          = "nic${count.index + 1}_config"
-    subnet_id                     = data.azurerm_subnet.services.id
-    private_ip_address_allocation = "Dynamic"
+# Azure Provider source and version being used
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "=3.86.0"
+    }
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = "=2.20.0"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "=3.4.3"
+    }
   }
-    tags                          = local.tre_workspace_service_tags
 
-  lifecycle { ignore_changes = [tags] }
+  backend "azurerm" {}
 }
 
-resource "azurerm_windows_virtual_machine" "avd_sessionhost" {
-  depends_on = [
-      azurerm_network_interface.avd_sessionhost_nic
-  ]
-  name                          = local.avd_sessionhost_name
-  resource_group_name           = data.azurerm_resource_group.ws.name
-  location                      = data.azurerm_resource_group.ws.location
-
-
-
-  size                = "Standard_B2ms"
-  admin_username      = "adminuser"
-  admin_password      = "Password@1234"
-  provision_vm_agent = true
-
-  network_interface_ids = [azurerm_network_interface.avd_sessionhost_nic.id]
-
-  identity {
-    type  = "SystemAssigned"
-  }
-
-  os_disk {
-    caching              = "ReadWrite"
-    storage_account_type = "Premium_LRS"
-  }
-
- source_image_reference {
-    publisher = "MicrosoftWindowsDesktop"
-    offer     = "Windows-10"
-    sku       = "20h2-evd"
-    version   = "latest"
+provider "azurerm" {
+  features {
+    key_vault {
+      # Don't purge on destroy (this would fail due to purge protection being enabled on keyvault)
+      purge_soft_delete_on_destroy               = false
+      purge_soft_deleted_secrets_on_destroy      = false
+      purge_soft_deleted_certificates_on_destroy = false
+      purge_soft_deleted_keys_on_destroy         = false
+      # When recreating an environment, recover any previously soft deleted secrets - set to true by default
+      recover_soft_deleted_key_vaults   = true
+      recover_soft_deleted_secrets      = true
+      recover_soft_deleted_certificates = true
+      recover_soft_deleted_keys         = true
+    }
   }
 }
-
-# Create AVD workspace
-resource "azurerm_virtual_desktop_workspace" "avd_workspace" {
-  name                          = local.avd_workspace_name
-  resource_group_name           = data.azurerm_resource_group.ws.name
-  location                      = data.azurerm_resource_group.ws.location
-  friendly_name                 = var.avd_workspace_display_name
-  description                   = var.avd_workspace_description
-  public_network_access_enabled = true
-  tags                          = local.tre_workspace_service_tags
-
-  lifecycle { ignore_changes = [tags] }
+/*
+provider "azuread" {
+  client_id     = var.auth_client_id
+  client_secret = var.auth_client_secret
+  tenant_id     = var.auth_tenant_id
 }
+*/
