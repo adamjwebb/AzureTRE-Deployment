@@ -26,13 +26,10 @@ resource "azurerm_network_interface" "avd_vm_nic" {
 }
 
 resource "azurerm_windows_virtual_machine" "avd_sessionhost" {
-  depends_on = [
-      azurerm_network_interface.avd_vm_nic
-  ]
-  name                = "ansuvm-01"
+  name                = local.avd_sessionhost_name
   resource_group_name = data.azurerm_resource_group.ws.name
   location            = data.azurerm_resource_group.ws.location
-  size                = "Standard_B2ms"
+  size                = local.avd_sessionhost_size
   admin_username      = "adminuser"
   admin_password      = "Password@1234"
   provision_vm_agent = true
@@ -48,12 +45,15 @@ resource "azurerm_windows_virtual_machine" "avd_sessionhost" {
     storage_account_type = "Premium_LRS"
   }
 
+  source_image_id = "/subscriptions/d78dbd33-fcc4-434e-a881-2b6f328241d3/resourceGroups/rg-avd-resources/providers/Microsoft.Compute/galleries/awcacecompgaltre/images/vmImageDef/versions/0.0.1"
+/*
  source_image_reference {
     publisher = "MicrosoftWindowsDesktop"
     offer     = "Windows-10"
     sku       = "20h2-evd"
     version   = "latest"
   }
+  */
 }
 
 locals {
@@ -93,12 +93,12 @@ SETTINGS
 PROTECTED_SETTINGS
 
 }
+
 resource "azurerm_virtual_machine_extension" "AADLoginForWindows" {
   depends_on = [
       azurerm_windows_virtual_machine.avd_sessionhost,
         azurerm_virtual_machine_extension.AVDModule
   ]
-  count = 1
   name                 = "AADLoginForWindows"
   virtual_machine_id   = azurerm_windows_virtual_machine.avd_sessionhost.id
   publisher            = "Microsoft.Azure.ActiveDirectory"
@@ -106,11 +106,11 @@ resource "azurerm_virtual_machine_extension" "AADLoginForWindows" {
   type_handler_version = "1.0"
   auto_upgrade_minor_version = true
 }
+
 resource "azurerm_virtual_machine_extension" "addaadjprivate" {
     depends_on = [
       azurerm_virtual_machine_extension.AADLoginForWindows
     ]
-    count = 1
   name                 = "AADJPRIVATE"
   virtual_machine_id =    azurerm_windows_virtual_machine.avd_sessionhost.id
   publisher            = "Microsoft.Compute"

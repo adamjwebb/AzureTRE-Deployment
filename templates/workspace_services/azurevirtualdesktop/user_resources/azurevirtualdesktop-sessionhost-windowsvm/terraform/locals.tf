@@ -40,13 +40,16 @@ locals {
   keyvault_name                                 = lower("kv-${substr(local.workspace_resource_name_suffix, -20, -1)}")
   service_resource_name_suffix                  = "${local.short_workspace_id}svc${local.short_service_id}"
   core_resource_group_name                      = "rg-${var.tre_id}"
-  avd_workspace_name                            = lower("vdws-${substr(local.service_resource_name_suffix, -30, -1)}")
-  avd_hostpool_name                             = lower("vdpool-${substr(local.service_resource_name_suffix, -30, -1)}")
-  avd_application_group_name                    = lower("vdag-${substr(local.service_resource_name_suffix, -30, -1)}")
+  avd_hostpool_name                             = lower("vdpool-${substr(local.workspace_resource_name_suffix, -20, -1)}")
+  avd_sessionhost_name                        = lower("vdvmws${local.short_workspace_id}")
   avd_hostpool_registrationinfo_expiration_date = timeadd(timestamp(), "720h")
   tre_workspace_service_tags = {
     tre_id                   = var.tre_id
     tre_workspace_id         = var.workspace_id
     tre_workspace_service_id = var.tre_resource_id
   }
+  #size                       = local.vm_sizes[var.vm_size]
+  avd_sessionhost_size                       = "Standard_B2ms"
 }
+
+

@@ -47,19 +47,3 @@ type        = string
 description = "Description of the Azure Virtual Desktop application group"
 default = "test description"
 }
-
-/*
-
-variable "auth_tenant_id" {
-  type        = string
-  description = "Used to authenticate into the AAD Tenant to create the AAD App"
-}
-variable "auth_client_id" {
-  type        = string
-  description = "Used to authenticate into the AAD Tenant to create the AAD App"
-}
-variable "auth_client_secret" {
-  type        = string
-  description = "Used to authenticate into the AAD Tenant to create the AAD App"
-}
-*/

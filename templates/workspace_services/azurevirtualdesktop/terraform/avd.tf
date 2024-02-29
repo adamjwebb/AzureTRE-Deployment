@@ -54,3 +54,12 @@ resource "azurerm_virtual_desktop_workspace_application_group_association" "avd_
   application_group_id = azurerm_virtual_desktop_application_group.avd_application_group.id
   workspace_id         = azurerm_virtual_desktop_workspace.avd_workspace.id
 }
+
+resource "azurerm_key_vault_secret" "avd_registration_token" {
+  name         = "avd-registration-token"
+  value        = azurerm_virtual_desktop_host_pool_registration_info.avd_hostpool_registrationinfo.token
+  key_vault_id = data.azurerm_key_vault.ws.id
+  tags         = local.tre_workspace_service_tags
+
+  lifecycle { ignore_changes = [tags] }
+}
