@@ -1,0 +1,121 @@
+---
+schemaVersion: 1.0.0
+name: tre-service-avd
+version: 0.1.27
+description: "Azure Virtual Desktop"
+dockerfile: Dockerfile.tmpl
+registry: azuretre
+
+credentials:
+  # Credentials for interacting with Azure
+  - name: azure_tenant_id
+    env: ARM_TENANT_ID
+  - name: azure_subscription_id
+    env: ARM_SUBSCRIPTION_ID
+  - name: azure_client_id
+    env: ARM_CLIENT_ID
+  - name: azure_client_secret
+    env: ARM_CLIENT_SECRET
+
+parameters:
+  - name: workspace_id
+    type: string
+  - name: tre_id
+    type: string
+    description: "The ID of the parent TRE instance e.g., mytre-dev-3142"
+  - name: id
+    type: string
+    description: "Resource ID"
+  - name: tfstate_resource_group_name
+    type: string
+    description: "Resource group containing the Terraform state storage account"
+  - name: tfstate_storage_account_name
+    type: string
+    description: "The name of the Terraform state storage account"
+  - name: tfstate_container_name
+    type: string
+    default: "tfstate"
+    description: "The name of the Terraform state storage container"
+  - name: azure_environment
+    type: string
+    default: "AzureCloud"
+    description: "Used by Azure CLI to set the Azure environment"
+    env: AZURE_ENVIRONMENT
+  - name: avd_workspace_display_name
+    description: "Name of the Azure Virtual Desktop workspace"
+    default: "Azure Virtual Desktop Workspace"
+  - name: avd_workspace_description
+    description: "Description of the Azure Virtual Desktop workspace"
+    default: "Azure Virtual Desktop Workspace Description"
+  - name: avd_hostpool_display_name
+    description: "Name of the Azure Virtual Desktop hostpool"
+    default: "Azure Virtual Desktop Hostpool"
+  - name: avd_hostpool_description
+    description: "Description of the Azure Virtual Desktop hostpool"
+    default: "Azure Virtual Desktop Hostpool Description"
+  - name: avd_application_group_display_name
+    description: "Name of the Azure Virtual Desktop App Group"
+    default: "Azure Virtual Desktop App Group"
+  - name: avd_application_group_description
+    description: "Description of the Azure Virtual Desktop app group"
+    default: "Azure Virtual Desktop App  Group Description"
+
+outputs:
+  - name: connection_uri
+    type: string
+    applyTo:
+      - install
+      - upgrade
+
+mixins:
+  - terraform:
+      clientVersion: 1.7.0
+
+install:
+  - terraform:
+      description: "Deploy shared service"
+      vars:
+        workspace_id: ${ bundle.parameters.workspace_id }
+        tre_id: ${ bundle.parameters.tre_id }
+        tre_resource_id: ${ bundle.parameters.id }
+        avd_workspace_display_name: ${ bundle.parameters.avd_workspace_display_name }
+        avd_workspace_description: ${ bundle.parameters.avd_workspace_description }
+        avd_hostpool_display_name: ${ bundle.parameters.avd_hostpool_display_name }
+        avd_hostpool_description: ${ bundle.parameters.avd_hostpool_description }
+        avd_application_group_display_name: ${ bundle.parameters.avd_application_group_display_name }
+        avd_application_group_description: ${ bundle.parameters.avd_application_group_description }
+      backendConfig:
+        resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
+        storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
+        container_name: ${ bundle.parameters.tfstate_container_name }
+        key: tre-service-avd-${ bundle.parameters.tre_id }
+      outputs:
+        - name: connection_uri
+
+upgrade:
+  - terraform:
+      description: "Upgrade shared service"
+      vars:
+        workspace_id: ${ bundle.parameters.workspace_id }
+        tre_id: ${ bundle.parameters.tre_id }
+        tre_resource_id: ${ bundle.parameters.id }
+      backendConfig:
+        resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
+        storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
+        container_name: ${ bundle.parameters.tfstate_container_name }
+        key: tre-service-avd-${ bundle.parameters.tre_id }
+      outputs:
+        - name: connection_uri
+
+uninstall:
+  - terraform:
+      description: "Tear down shared service"
+      vars:
+        workspace_id: ${ bundle.parameters.workspace_id }
+        tre_id: ${ bundle.parameters.tre_id }
+        tre_resource_id: ${ bundle.parameters.id }
+      backendConfig:
+        resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
+        storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
+        container_name: ${ bundle.parameters.tfstate_container_name }
+        key: tre-service-avd-${ bundle.parameters.tre_id }

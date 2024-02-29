@@ -419,3 +419,9 @@ FodyWeavers.xsd
 
 # Local .terraform directories
 **/.terraform/*
+terraform.tfstate
+validation.txt
+letsencrypt/*
+templates/workspace_services/azurevirtualdesktop/terraform/.terraform.lock.hcl
+templates/workspace_services/azurevirtualdesktop/terraform/main.tfplan
+templates/workspace_services/azurevirtualdesktop/terraform/terraform.tfstate.backup

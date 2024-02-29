@@ -1,0 +1,55 @@
+/*
+locals {
+
+  law_name = "log-${var.tre_id}"
+
+  short_service_id               = substr(var.tre_resource_id, -4, -1)
+  short_workspace_id             = substr(var.workspace_id, -4, -1)
+  workspace_resource_name_suffix = "${var.tre_id}-ws-${local.short_workspace_id}"
+  service_resource_name_suffix   = "${var.tre_id}-ws-${local.short_workspace_id}-svc-${local.short_service_id}"
+  vm_name                        = "avd-sh-${local.short_service_id}"
+  keyvault_name                  = lower("kv-${substr(local.workspace_resource_name_suffix, -20, -1)}")
+  storage_name                   = lower(replace("stg${substr(local.workspace_resource_name_suffix, -8, -1)}", "-", ""))
+  vm_password_secret_name        = "${local.vm_name}-admin-credentials"
+  tre_workspace_service_tags = {
+    tre_id                   = var.tre_id
+    tre_workspace_id         = var.workspace_id
+    tre_workspace_service_id = var.tre_resource_id
+  }
+
+  nexus_proxy_url = var.use_core_app_gateway ? "https://nexus-${one(data.azurerm_public_ip.app_gateway_ip[*].fqdn)}" : ""
+
+  # Load VM SKU/image details from porter.yaml
+  porter_yaml   = yamldecode(file("${path.module}/../porter.yaml"))
+  vm_sizes      = local.porter_yaml["custom"]["vm_sizes"]
+  image_details = local.porter_yaml["custom"]["image_options"]
+
+  # Create local variables to support the VM resource
+  selected_image = local.image_details[var.image]
+  # selected_image_source_refs is an array to enable easy use of a dynamic block
+  selected_image_source_refs = lookup(local.selected_image, "source_image_reference", null) == null ? [] : [local.selected_image.source_image_reference]
+  selected_image_source_id   = lookup(local.selected_image, "source_image_name", null) == null ? null : "${var.image_gallery_id}/images/${local.selected_image.source_image_name}"
+}
+*/
+
+locals {
+  short_service_id                              = substr(var.tre_resource_id, -4, -1)
+  short_workspace_id                            = substr(var.workspace_id, -4, -1)
+  #aad_tenant_id                                 = data.azurerm_key_vault_secret.aad_tenant_id.value
+  workspace_resource_name_suffix                = "${var.tre_id}-ws-${local.short_workspace_id}"
+  keyvault_name                                 = lower("kv-${substr(local.workspace_resource_name_suffix, -20, -1)}")
+  service_resource_name_suffix                  = "${local.short_workspace_id}svc${local.short_service_id}"
+  core_resource_group_name                      = "rg-${var.tre_id}"
+  avd_hostpool_name                             = lower("vdpool-${substr(local.workspace_resource_name_suffix, -20, -1)}")
+  avd_sessionhost_name                        = lower("vdvmws${local.short_workspace_id}")
+  avd_hostpool_registrationinfo_expiration_date = timeadd(timestamp(), "720h")
+  tre_workspace_service_tags = {
+    tre_id                   = var.tre_id
+    tre_workspace_id         = var.workspace_id
+    tre_workspace_service_id = var.tre_resource_id
+  }
+  #size                       = local.vm_sizes[var.vm_size]
+  avd_sessionhost_size                       = "Standard_B2ms"
+}
+
+
