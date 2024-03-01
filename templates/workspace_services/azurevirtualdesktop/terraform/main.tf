@@ -34,3 +34,9 @@ provider "azurerm" {
     }
   }
 }
+
+provider "azuread" {
+  client_id     = var.auth_client_id
+  client_secret = var.auth_client_secret
+  tenant_id     = var.auth_tenant_id
+}

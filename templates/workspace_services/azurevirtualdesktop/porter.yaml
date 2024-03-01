@@ -97,6 +97,9 @@ install:
         avd_hostpool_description: ${ bundle.parameters.avd_hostpool_description }
         avd_application_group_display_name: ${ bundle.parameters.avd_application_group_display_name }
         avd_application_group_description: ${ bundle.parameters.avd_application_group_description }
+        auth_client_id: ${ bundle.credentials.auth_client_id }
+        auth_client_secret: ${ bundle.credentials.auth_client_secret }
+        auth_tenant_id: ${ bundle.credentials.auth_tenant_id }
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
