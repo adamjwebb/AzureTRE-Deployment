@@ -105,8 +105,6 @@ install:
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
         container_name: ${ bundle.parameters.tfstate_container_name }
         key: tre-service-avd-${ bundle.parameters.tre_id }
-      outputs:
-        - name: connection_uri
 
 upgrade:
   - terraform:
