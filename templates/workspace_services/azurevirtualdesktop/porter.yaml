@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-avd
-version: 0.1.30
+version: 0.1.31
 description: "Azure Virtual Desktop"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -71,13 +71,6 @@ parameters:
     description: "Description of the Azure Virtual Desktop app group"
     default: "Azure Virtual Desktop App  Group Description"
 
-outputs:
-  - name: connection_uri
-    type: string
-    applyTo:
-      - install
-      - upgrade
-
 mixins:
   - terraform:
       clientVersion: 1.7.0
@@ -118,8 +111,6 @@ upgrade:
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
         container_name: ${ bundle.parameters.tfstate_container_name }
         key: tre-service-avd-${ bundle.parameters.tre_id }
-      outputs:
-        - name: connection_uri
 
 uninstall:
   - terraform:
