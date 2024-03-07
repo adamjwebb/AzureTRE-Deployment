@@ -397,6 +397,8 @@ jobs:
           # Add your custom Bundles below this
           - {BUNDLE_TYPE: "workspace_service",
              BUNDLE_DIR: "./templates/workspace_services/azurevirtualdesktop"}
+          - {BUNDLE_TYPE: "user_resource",
+             BUNDLE_DIR: "./templates/workspace_services/azurevirtualdesktop/user_resources/azurevirtualdesktop-sessionhost-windowsvm"}
     environment: ${{ inputs.environmentName }}
     steps:
       - name: Checkout
@@ -553,6 +555,8 @@ jobs:
         # Add your bundles here
           - {BUNDLE_TYPE: "workspace_service",
              BUNDLE_DIR: "./templates/workspace_services/azurevirtualdesktop"}
+          - {BUNDLE_TYPE: "user_resource",
+             BUNDLE_DIR: "./templates/workspace_services/azurevirtualdesktop/user_resources/azurevirtualdesktop-sessionhost-windowsvm"}
     environment: ${{ inputs.environmentName }}
     steps:
       - name: Checkout
@@ -603,6 +607,9 @@ jobs:
              BUNDLE_DIR: "\\${AZURETRE_HOME}/templates/workspace_services/guacamole/user_resources/guacamole-azure-import-reviewvm",
              WORKSPACE_SERVICE_NAME: "tre-service-guacamole"}
              # Add your bundles here
+          - {BUNDLE_TYPE: "user_resource",
+             BUNDLE_DIR: "./templates/workspace_services/azurevirtualdesktop/user_resources/azurevirtualdesktop-sessionhost-windowsvm",
+             WORKSPACE_SERVICE_NAME: "tre-service-avd"}
     environment: ${{ inputs.environmentName }}
     steps:
       - name: Checkout
