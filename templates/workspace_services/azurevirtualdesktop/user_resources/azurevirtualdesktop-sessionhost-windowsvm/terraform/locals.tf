@@ -49,7 +49,18 @@ locals {
     tre_workspace_service_id = var.tre_resource_id
   }
   #size                       = local.vm_sizes[var.vm_size]
-  avd_sessionhost_size                       = "Standard_B2ms"
+  //avd_sessionhost_size                       = "Standard_B2ms"
+
+  # Load VM SKU/image details from porter.yaml
+  porter_yaml   = yamldecode(file("${path.module}/../porter.yaml"))
+  avd_sessionhost_sizes      = local.porter_yaml["custom"]["vm_sizes"]
+  avd_sessionhost_image_details = local.porter_yaml["custom"]["image_options"]
+
+  # Create local variables to support the VM resource
+  selected_image = local.avd_sessionhost_image_details[var.avd_sessionhost_image]
+  # selected_image_source_refs is an array to enable easy use of a dynamic block
+  selected_image_source_refs = lookup(local.selected_image, "source_image_reference", null) == null ? [] : [local.selected_image.source_image_reference]
+  selected_image_source_id   = lookup(local.selected_image, "source_image_name", null) == null ? null : "${var.avd_sessionhost_image_gallery_id}/images/${local.selected_image.source_image_name}"
 }
 
 

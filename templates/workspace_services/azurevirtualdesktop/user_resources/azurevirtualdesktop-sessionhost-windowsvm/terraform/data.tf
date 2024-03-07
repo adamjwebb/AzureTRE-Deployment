@@ -22,6 +22,11 @@ data "azurerm_key_vault" "ws" {
   resource_group_name = data.azurerm_resource_group.ws.name
 }
 
+data "azurerm_key_vault_secret" "avd_hostpool_registrationtoken"{
+  name = "${local.avd_hostpool_name}-registration-token"
+  key_vault_id = data.azurerm_key_vault.ws.id
+}
+
 data "azurerm_virtual_desktop_host_pool" "avdhostpool" {
   name = local.avd_hostpool_name
   resource_group_name = data.azurerm_resource_group.ws.name
@@ -43,7 +48,7 @@ data "azurerm_log_analytics_workspace" "oms-workspace" {
   name                = local.law_name
   resource_group_name = data.azurerm_resource_group.core.name
 }
-
+*/
 data "azurerm_role_definition" "desktop_virtualization_user" {
   name = "Desktop Virtualization User"
 }
@@ -55,7 +60,7 @@ data "azurerm_role_definition" "virtual_machine_user_login" {
 data "azurerm_role_definition" "virtual_machine_admin_login" {
   name = "Virtual Machine Administrator Login"
 }
-/*
+
 data "azuread_group" "workspace_owners" {
   display_name     = "${local.workspace_resource_name_suffix} Workspace Owners"
   security_enabled = true
@@ -70,4 +75,4 @@ data "azuread_group" "workspace_airlock_managers" {
   display_name     = "${local.workspace_resource_name_suffix} Airlock Managers"
   security_enabled = true
 }
-*/
+

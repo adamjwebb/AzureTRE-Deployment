@@ -1,12 +1,14 @@
-locals {
-  registration_token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IkY5NTVDQTVDNTAyMDJGMEY3NTc0RUE2M0Q3NkM4NUNFNjZBNzI3ODkiLCJ0eXAiOiJKV1QifQ.eyJSZWdpc3RyYXRpb25JZCI6ImQxOWNjMTMxLTNmNzAtNDVjZC1hZWVhLTljOTYzYTYyNjFlYiIsIkJyb2tlclVyaSI6Imh0dHBzOi8vcmRicm9rZXItZy1jYS1yMC53dmQubWljcm9zb2Z0LmNvbS8iLCJEaWFnbm9zdGljc1VyaSI6Imh0dHBzOi8vcmRkaWFnbm9zdGljcy1nLWNhLXIwLnd2ZC5taWNyb3NvZnQuY29tLyIsIkVuZHBvaW50UG9vbElkIjoiYzY5NDIzNzEtNzVjZi00MGU0LWFiNTAtN2IxNzA2OWRhNDRjIiwiR2xvYmFsQnJva2VyVXJpIjoiaHR0cHM6Ly9yZGJyb2tlci53dmQubWljcm9zb2Z0LmNvbS8iLCJHZW9ncmFwaHkiOiJDQSIsIkdsb2JhbEJyb2tlclJlc291cmNlSWRVcmkiOiJodHRwczovL2M2OTQyMzcxLTc1Y2YtNDBlNC1hYjUwLTdiMTcwNjlkYTQ0Yy5yZGJyb2tlci53dmQubWljcm9zb2Z0LmNvbS8iLCJCcm9rZXJSZXNvdXJjZUlkVXJpIjoiaHR0cHM6Ly9jNjk0MjM3MS03NWNmLTQwZTQtYWI1MC03YjE3MDY5ZGE0NGMucmRicm9rZXItZy1jYS1yMC53dmQubWljcm9zb2Z0LmNvbS8iLCJEaWFnbm9zdGljc1Jlc291cmNlSWRVcmkiOiJodHRwczovL2M2OTQyMzcxLTc1Y2YtNDBlNC1hYjUwLTdiMTcwNjlkYTQ0Yy5yZGRpYWdub3N0aWNzLWctY2EtcjAud3ZkLm1pY3Jvc29mdC5jb20vIiwiQUFEVGVuYW50SWQiOiI4Y2VlZTI2ZC1mM2YyLTQyYTUtODQ5MS1hNGE3ZjJmZTAxZjIiLCJuYmYiOjE3MDc2MzQ4MzQsImV4cCI6MTcxMDIyNjgyNiwiaXNzIjoiUkRJbmZyYVRva2VuTWFuYWdlciIsImF1ZCI6IlJEbWkifQ.WPWjnO-9unQho74boC6DCJWFd0G3rxs6fkUmrKU1QO_hpqU-MiDR2ETuzKNhtA9KjKKCiZR6rILrwIu2x0mVy4I4Tzu_eTWyBsNi1wtqkGZby5KthYzFg5leqiULvy-u2kmIYBJnchwUBtiOnYNqRh8Qg1kvkAkojK8gNYrulV3vclvprnav0HGbsZ9oEdK1WDqjhyH0jGreEGDqneScdOp_CA7kImGex1LZrPPVBslwMjn8SuHCKsD6LF_eDfzI0oTRnfW22TOFqsJqhicTlQaU3zuiN8bOUFtasj2hI3Rvk71yE_3FFdQYd2uRFlBezkt4l1qOhX9D-xSf184nMQ"
-}
-
-resource "random_string" "AVD_local_password" {
+resource "random_password" "avd_sessionhost_local_password" {
   length           = 16
+  lower            = true
+  min_lower        = 1
+  upper            = true
+  min_upper        = 1
+  numeric          = true
+  min_numeric      = 1
   special          = true
-  min_special      = 2
-  override_special = "*!@#?"
+  min_special      = 1
+  override_special = "_%@"
 }
 
 resource "azurerm_network_interface" "avd_vm_nic" {
@@ -26,100 +28,99 @@ resource "azurerm_network_interface" "avd_vm_nic" {
 }
 
 resource "azurerm_windows_virtual_machine" "avd_sessionhost" {
-  name                = local.avd_sessionhost_name
-  resource_group_name = data.azurerm_resource_group.ws.name
-  location            = data.azurerm_resource_group.ws.location
-  size                = local.avd_sessionhost_size
-  admin_username      = "adminuser"
-  admin_password      = "Password@1234"
-  provision_vm_agent = true
+  name                       = local.avd_sessionhost_name
+  resource_group_name        = data.azurerm_resource_group.ws.name
+  location                   = data.azurerm_resource_group.ws.location
+  size                       = local.avd_sessionhost_sizes[var.avd_sessionhost_size]
+  allow_extension_operations = true
+  admin_username             = "avdadminuser"
+  admin_password             = random_password.avd_sessionhost_local_password.result
+  provision_vm_agent         = true
 
   network_interface_ids = [azurerm_network_interface.avd_vm_nic.id]
 
   identity {
-    type  = "SystemAssigned"
+    type = "SystemAssigned"
   }
 
   os_disk {
+    name                 = "${local.avd_sessionhost_name}-osdisk"
     caching              = "ReadWrite"
     storage_account_type = "Premium_LRS"
   }
 
-  source_image_id = "/subscriptions/d78dbd33-fcc4-434e-a881-2b6f328241d3/resourceGroups/rg-avd-resources/providers/Microsoft.Compute/galleries/awcacecompgaltre/images/vmImageDef/versions/0.0.1"
+  # set source_image_id/reference depending on the config for the selected image
+  source_image_id = local.selected_image_source_id
+  dynamic "source_image_reference" {
+    for_each = local.selected_image_source_refs
+    content {
+      publisher = source_image_reference.value["publisher"]
+      offer     = source_image_reference.value["offer"]
+      sku       = source_image_reference.value["sku"]
+      version   = source_image_reference.value["version"]
+    }
+  }
+}
+
+resource "azurerm_key_vault_secret" "avd_sessionhost_password" {
+  name         = "${azurerm_windows_virtual_machine.avd_sessionhost.name}-session-host-password"
+  value        = random_password.avd_sessionhost_local_password.result
+  key_vault_id = data.azurerm_key_vault.ws.id
+  tags         = local.tre_workspace_service_tags
+
+  lifecycle { ignore_changes = [tags] }
+}
+
 /*
- source_image_reference {
-    publisher = "MicrosoftWindowsDesktop"
-    offer     = "Windows-10"
-    sku       = "20h2-evd"
-    version   = "latest"
-  }
-  */
-}
-
 locals {
-   shutdown_command     = "shutdown -r -t 10"
-  exit_code_hack       = "exit 0"
-  commandtorun         = "New-Item -Path HKLM:/SOFTWARE/Microsoft/RDInfraAgent/AADJPrivate"
-  powershell_command   = "${local.commandtorun}; ${local.shutdown_command}; ${local.exit_code_hack}"
+  shutdown_command   = "shutdown -r -t 10"
+  exit_code_hack     = "exit 0"
+  commandtorun       = "New-Item -Path HKLM:/SOFTWARE/Microsoft/RDInfraAgent/AADJPrivate"
+  powershell_command = "${local.commandtorun}; ${local.shutdown_command}; ${local.exit_code_hack}"
 }
-
-resource "azurerm_virtual_machine_extension" "AVDModule" {
-  depends_on = [
-      azurerm_windows_virtual_machine.avd_sessionhost
-  ]
-  count = 1
-  name                 = "Microsoft.PowerShell.DSC"
-  virtual_machine_id   = azurerm_windows_virtual_machine.avd_sessionhost.id
-  publisher            = "Microsoft.Powershell"
-  type                 = "DSC"
-  type_handler_version = "2.73"
-  settings = <<-SETTINGS
-    {
-        "modulesUrl": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration_11-22-2021.zip",
-        "ConfigurationFunction": "Configuration.ps1\\AddSessionHost",
-        "Properties" : {
-          "hostPoolName" : "${data.azurerm_virtual_desktop_host_pool.avdhostpool.name}",
-          "aadJoin": true
-        }
-    }
-SETTINGS
-
-  protected_settings = <<PROTECTED_SETTINGS
-  {
-    "properties": {
-      "registrationInfoToken": "${local.registration_token}"
-    }
-  }
-PROTECTED_SETTINGS
-
-}
-
-resource "azurerm_virtual_machine_extension" "AADLoginForWindows" {
-  depends_on = [
-      azurerm_windows_virtual_machine.avd_sessionhost,
-        azurerm_virtual_machine_extension.AVDModule
-  ]
-  name                 = "AADLoginForWindows"
+*/
+resource "azurerm_virtual_machine_extension" "aad_login" {
+  name                 = "${azurerm_windows_virtual_machine.avd_sessionhost.name}-aad-login"
   virtual_machine_id   = azurerm_windows_virtual_machine.avd_sessionhost.id
   publisher            = "Microsoft.Azure.ActiveDirectory"
   type                 = "AADLoginForWindows"
-  type_handler_version = "1.0"
-  auto_upgrade_minor_version = true
+  type_handler_version = "2.1"
+
+  lifecycle { ignore_changes = [tags] }
 }
 
-resource "azurerm_virtual_machine_extension" "addaadjprivate" {
-    depends_on = [
-      azurerm_virtual_machine_extension.AADLoginForWindows
-    ]
-  name                 = "AADJPRIVATE"
-  virtual_machine_id =    azurerm_windows_virtual_machine.avd_sessionhost.id
-  publisher            = "Microsoft.Compute"
-  type                 = "CustomScriptExtension"
-  type_handler_version = "1.9"
+resource "azurerm_virtual_machine_extension" "avd-dsc" {
+  name                       = "${azurerm_windows_virtual_machine.avd_sessionhost.name}-avd-dsc"
+  virtual_machine_id         = azurerm_windows_virtual_machine.avd_sessionhost.id
+  publisher                  = "Microsoft.Powershell"
+  type                       = "DSC"
+  type_handler_version       = "2.73"
+  auto_upgrade_minor_version = true
 
   settings = <<SETTINGS
-    {
-        "commandToExecute": "powershell.exe -Command \"${local.powershell_command}\""
+  {
+    "modulesUrl": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration_1.0.02566.260.zip",
+    "configurationFunction": "Configuration.ps1\\AddSessionHost",
+    "properties": {
+      "HostPoolName":"${data.azurerm_virtual_desktop_host_pool.avdhostpool.name}",
+      "AadJoin": true,
+      "RegistrationInfoTokenCredential": {
+        "UserName": "PLACEHOLDER_DO_NOT_USE",
+        "Password": "PrivateSettingsRef:RegistrationInfoToken"
+      },
+      "UseAgentDownloadEndpoint": true
     }
-SETTINGS
+  }
+  SETTINGS
+
+  protected_settings = <<PROTECTED_SETTINGS
+  {
+    "Items": {
+      "RegistrationInfoToken": "${data.azurerm_key_vault_secret.avd_hostpool_registrationtoken.value}"
+    }
+  }
+  PROTECTED_SETTINGS
+
+  lifecycle { ignore_changes = [tags] }
 }
+

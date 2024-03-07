@@ -35,6 +35,15 @@ resource "azurerm_virtual_desktop_host_pool_registration_info" "avd_hostpool_reg
   expiration_date = local.avd_hostpool_registrationinfo_expiration_date
 }
 
+resource "azurerm_key_vault_secret" "avd_hostpool_registrationtoken" {
+  name         = "${local.avd_hostpool_name}-registration-token"
+  value        = azurerm_virtual_desktop_host_pool_registration_info.avd_hostpool_registrationinfo.token
+  key_vault_id = data.azurerm_key_vault.ws.id
+  tags         = local.tre_workspace_service_tags
+
+  lifecycle { ignore_changes = [tags] }
+}
+
 # Create AVD DAG
 resource "azurerm_virtual_desktop_application_group" "avd_application_group" {
   name                = local.avd_application_group_name
