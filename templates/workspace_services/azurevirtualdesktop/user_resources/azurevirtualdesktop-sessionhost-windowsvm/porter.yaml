@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-avd
-version: 0.1.27
+version: 0.1.28
 description: "Azure Virtual Desktop"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -121,9 +121,9 @@ install:
         workspace_id: ${ bundle.parameters.workspace_id }
         tre_id: ${ bundle.parameters.tre_id }
         tre_resource_id: ${ bundle.parameters.id }
-        image: ${ bundle.parameters.os_image }
-        vm_size: ${ bundle.parameters.vm_size }
-        image_gallery_id: ${ bundle.parameters.image_gallery_id }
+        avd_sessionhost_image: ${ bundle.parameters.os_image }
+        avd_sessionhost_size: ${ bundle.parameters.vm_size }
+        avd_sessionhost_image_gallery_id: ${ bundle.parameters.image_gallery_id }
         auth_client_id: ${ bundle.credentials.auth_client_id }
         auth_client_secret: ${ bundle.credentials.auth_client_secret }
         auth_tenant_id: ${ bundle.credentials.auth_tenant_id }
@@ -140,9 +140,9 @@ upgrade:
         workspace_id: ${ bundle.parameters.workspace_id }
         tre_id: ${ bundle.parameters.tre_id }
         tre_resource_id: ${ bundle.parameters.id }
-        image: ${ bundle.parameters.os_image }
-        vm_size: ${ bundle.parameters.vm_size }
-        image_gallery_id: ${ bundle.parameters.image_gallery_id }
+        avd_sessionhost_image: ${ bundle.parameters.os_image }
+        avd_sessionhost_size: ${ bundle.parameters.vm_size }
+        avd_sessionhost_image_gallery_id: ${ bundle.parameters.image_gallery_id }
         auth_client_id: ${ bundle.credentials.auth_client_id }
         auth_client_secret: ${ bundle.credentials.auth_client_secret }
         auth_tenant_id: ${ bundle.credentials.auth_tenant_id }
@@ -159,9 +159,9 @@ uninstall:
         workspace_id: ${ bundle.parameters.workspace_id }
         tre_id: ${ bundle.parameters.tre_id }
         tre_resource_id: ${ bundle.parameters.id }
-        image: ${ bundle.parameters.os_image }
-        vm_size: ${ bundle.parameters.vm_size }
-        image_gallery_id: ${ bundle.parameters.image_gallery_id }
+        avd_sessionhost_image: ${ bundle.parameters.os_image }
+        avd_sessionhost_size: ${ bundle.parameters.vm_size }
+        avd_sessionhost_image_gallery_id: ${ bundle.parameters.image_gallery_id }
         auth_client_id: ${ bundle.credentials.auth_client_id }
         auth_client_secret: ${ bundle.credentials.auth_client_secret }
         auth_tenant_id: ${ bundle.credentials.auth_tenant_id }
