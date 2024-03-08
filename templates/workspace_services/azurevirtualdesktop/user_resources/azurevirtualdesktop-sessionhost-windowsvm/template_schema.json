@@ -34,20 +34,6 @@
         "16 CPU | 64GB RAM"
       ],
       "updateable": true
-    },
-    "vm_users_object_id": {
-      "$id": "#/properties/vm_users_object_id",
-      "type": "string",
-      "title": "VM Users Object ID",
-      "description": "Object ID of the user(s) or group to be added to the VM",
-      "updateable": true
-    },
-    "shared_storage_access": {
-      "$id": "#/properties/shared_storage_access",
-      "type": "boolean",
-      "title": "Shared storage",
-      "default": true,
-      "description": "Enable access to shared storage"
     }
   }
 }

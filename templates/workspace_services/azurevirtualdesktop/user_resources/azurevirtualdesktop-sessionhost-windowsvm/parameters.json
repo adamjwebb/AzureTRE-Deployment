@@ -59,27 +59,9 @@
       }
     },
     {
-      "name": "shared_storage_access",
-      "source": {
-        "env": "SHARED_STORAGE_ACCESS"
-      }
-    },
-    {
-      "name": "shared_storage_name",
-      "source": {
-        "env": "SHARED_STORAGE_NAME"
-      }
-    },
-    {
       "name": "vm_size",
       "source": {
         "env": "VM_SIZE"
-      }
-    },
-    {
-      "name": "vm_users_object_id",
-      "source": {
-        "env": "VM_USERS_OBJECT_ID"
       }
     },
     {
