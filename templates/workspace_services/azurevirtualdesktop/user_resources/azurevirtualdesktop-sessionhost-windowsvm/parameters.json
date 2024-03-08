@@ -2,7 +2,7 @@
   "schemaType": "ParameterSet",
   "schemaVersion": "1.0.1",
   "namespace": "",
-  "name": "tre-service-avd",
+  "name": "tre-service-avd-windowsvm",
   "parameters": [
     {
       "name": "tre_id",
