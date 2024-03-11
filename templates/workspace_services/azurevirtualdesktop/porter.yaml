@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-avd
-version: 0.1.33
+version: 0.1.34
 description: "Azure Virtual Desktop"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -106,6 +106,15 @@ upgrade:
         workspace_id: ${ bundle.parameters.workspace_id }
         tre_id: ${ bundle.parameters.tre_id }
         tre_resource_id: ${ bundle.parameters.id }
+        avd_workspace_display_name: ${ bundle.parameters.avd_workspace_display_name }
+        avd_workspace_description: ${ bundle.parameters.avd_workspace_description }
+        avd_hostpool_display_name: ${ bundle.parameters.avd_hostpool_display_name }
+        avd_hostpool_description: ${ bundle.parameters.avd_hostpool_description }
+        avd_application_group_display_name: ${ bundle.parameters.avd_application_group_display_name }
+        avd_application_group_description: ${ bundle.parameters.avd_application_group_description }
+        auth_client_id: ${ bundle.credentials.auth_client_id }
+        auth_client_secret: ${ bundle.credentials.auth_client_secret }
+        auth_tenant_id: ${ bundle.credentials.auth_tenant_id }
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
@@ -119,6 +128,15 @@ uninstall:
         workspace_id: ${ bundle.parameters.workspace_id }
         tre_id: ${ bundle.parameters.tre_id }
         tre_resource_id: ${ bundle.parameters.id }
+        avd_workspace_display_name: ${ bundle.parameters.avd_workspace_display_name }
+        avd_workspace_description: ${ bundle.parameters.avd_workspace_description }
+        avd_hostpool_display_name: ${ bundle.parameters.avd_hostpool_display_name }
+        avd_hostpool_description: ${ bundle.parameters.avd_hostpool_description }
+        avd_application_group_display_name: ${ bundle.parameters.avd_application_group_display_name }
+        avd_application_group_description: ${ bundle.parameters.avd_application_group_description }
+        auth_client_id: ${ bundle.credentials.auth_client_id }
+        auth_client_secret: ${ bundle.credentials.auth_client_secret }
+        auth_tenant_id: ${ bundle.credentials.auth_tenant_id }
       backendConfig:
         resource_group_name: ${ bundle.parameters.tfstate_resource_group_name }
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
