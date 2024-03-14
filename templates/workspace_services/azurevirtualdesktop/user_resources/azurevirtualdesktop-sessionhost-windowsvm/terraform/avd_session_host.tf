@@ -103,12 +103,7 @@ resource "azurerm_virtual_machine_extension" "avd-dsc" {
     "configurationFunction": "Configuration.ps1\\AddSessionHost",
     "properties": {
       "HostPoolName":"${data.azurerm_virtual_desktop_host_pool.avdhostpool.name}",
-      "AadJoin": true,
-      "RegistrationInfoToken": {
-        "UserName": "PLACEHOLDER_DO_NOT_USE",
-        "Password": "PrivateSettingsRef:RegistrationInfoTokenValue"
-      },
-      "UseAgentDownloadEndpoint": true
+      "RegistrationInfoToken": {"PrivateSettingsRef:RegistrationInfoTokenValue"}
     }
   }
   SETTINGS
