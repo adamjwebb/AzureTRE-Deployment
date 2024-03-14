@@ -108,7 +108,7 @@ resource "azurerm_virtual_machine_extension" "avd-dsc" {
   protected_settings         = <<PROTECTED_SETTINGS
     {
       "properties" : {
-            "registrationInfoToken" : "${azurerm_virtual_desktop_host_pool_registration_info.avd_token.token}"
+            "registrationInfoToken" : "${data.azurerm_key_vault_secret.avd_hostpool_registrationtoken.value}"
         }
     }
     PROTECTED_SETTINGS
