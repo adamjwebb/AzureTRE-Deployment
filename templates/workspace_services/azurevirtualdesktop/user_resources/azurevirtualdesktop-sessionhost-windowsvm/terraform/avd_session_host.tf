@@ -104,9 +104,9 @@ resource "azurerm_virtual_machine_extension" "avd-dsc" {
     "properties": {
       "HostPoolName":"${data.azurerm_virtual_desktop_host_pool.avdhostpool.name}",
       "AadJoin": true,
-      "RegistrationInfoTokenCredential": {
+      "RegistrationInfoToken": {
         "UserName": "PLACEHOLDER_DO_NOT_USE",
-        "Password": "PrivateSettingsRef:RegistrationInfoToken"
+        "Password": "PrivateSettingsRef:RegistrationInfoTokenValue"
       },
       "UseAgentDownloadEndpoint": true
     }
@@ -116,7 +116,7 @@ resource "azurerm_virtual_machine_extension" "avd-dsc" {
   protected_settings = <<PROTECTED_SETTINGS
   {
     "Items": {
-      "RegistrationInfoToken": "${data.azurerm_key_vault_secret.avd_hostpool_registrationtoken.value}"
+      "RegistrationInfoTokenValue": "${data.azurerm_key_vault_secret.avd_hostpool_registrationtoken.value}"
     }
   }
   PROTECTED_SETTINGS
