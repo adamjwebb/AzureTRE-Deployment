@@ -40,6 +40,6 @@ variable "auth_client_secret" {
 
 variable "workspace_ad_group_naming_prefix" {
   type        = string
-  description = "Prefix for Workspace Azure AD groups"
-  default     = "${local.workspace_resource_name_suffix} "
+  description = "Naming prefix for Workspace Azure AD groups"
+  default     = ""
 }
