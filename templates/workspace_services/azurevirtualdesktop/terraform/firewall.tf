@@ -134,10 +134,6 @@ resource "azurerm_firewall_policy_rule_collection_group" "avdrulecollectiongroup
       ]
     }
 
-
-
-
-
   }
 
   application_rule_collection {
@@ -297,35 +293,3 @@ resource "azurerm_firewall_policy_rule_collection_group" "avdrulecollectiongroup
 
   }
 }
-
-
-/*
-resource "azurerm_firewall_application_rule_collection" "avdapprulecollection" {
-  name                = "arc-${local.service_resource_name_suffix}-avd"
-  azure_firewall_name = data.azurerm_firewall.fw.name
-  resource_group_name = data.azurerm_firewall.fw.resource_group_name
-  priority            = data.external.rule_priorities.result.application_rule_priority
-  action              = "Allow"
-
-  rule {
-    name             = "AVD agent & service traffic"
-    source_addresses = data.azurerm_subnet.services.address_prefix
-    fqdn_tags        = "WindowsVirtualDesktop"
-    target_fqdns     = "*.prod.warm.ingest.monitor.core.windows.net, catalogartifact.azureedge.net, gcs.prod.monitoring.core.windows.net, mrsglobalsteus2prod.blob.core.windows.net, wvdportalstorageblob.blob.core.windows.net"
-    protocol {
-      port = "443"
-      type = ""
-    }
-  }
-
-  rule {
-    name             = "Windows activation traffic"
-    source_addresses = data.azurerm_subnet.services.address_prefix
-    target_fqdns     = "kms.core.windows.net, azkms.core.windows.net"
-    protocol {
-      port = "443"
-      type = "Https"
-    }
-  }
-}
-*/

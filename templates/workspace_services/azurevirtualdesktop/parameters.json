@@ -51,6 +51,12 @@
       "source": {
         "env": "AZURE_ENVIRONMENT"
       }
+    },
+    {
+      "name": "workspace_ad_group_naming_prefix",
+      "source": {
+        "env": "WORKSPACE_AD_GROUP_NAMING_PREFIX"
+      }
     }
   ]
 }

@@ -32,23 +32,6 @@ data "azurerm_virtual_desktop_host_pool" "avdhostpool" {
   resource_group_name = data.azurerm_resource_group.ws.name
 }
 
-/*
-data "azurerm_storage_account" "stg" {
-  name                = local.storage_name
-  resource_group_name = data.azurerm_resource_group.ws.name
-}
-
-data "azurerm_storage_share" "shared_storage" {
-  count                = var.shared_storage_access ? 1 : 0
-  name                 = var.shared_storage_name
-  storage_account_name = data.azurerm_storage_account.stg.name
-}
-
-data "azurerm_log_analytics_workspace" "oms-workspace" {
-  name                = local.law_name
-  resource_group_name = data.azurerm_resource_group.core.name
-}
-*/
 data "azurerm_role_definition" "desktop_virtualization_user" {
   name = "Desktop Virtualization User"
 }
@@ -62,17 +45,17 @@ data "azurerm_role_definition" "virtual_machine_admin_login" {
 }
 
 data "azuread_group" "workspace_owners" {
-  display_name     = "${local.workspace_resource_name_suffix} Workspace Owners"
+  display_name     = "${var.workspace_ad_group_naming_prefix}Workspace Owners"
   security_enabled = true
 }
 
 data "azuread_group" "workspace_researchers" {
-  display_name     = "${local.workspace_resource_name_suffix} Workspace Researchers"
+  display_name     = "${var.workspace_ad_group_naming_prefix}Workspace Researchers"
   security_enabled = true
 }
 
 data "azuread_group" "workspace_airlock_managers" {
-  display_name     = "${local.workspace_resource_name_suffix} Airlock Managers"
+  display_name     = "${var.workspace_ad_group_naming_prefix}Airlock Managers"
   security_enabled = true
 }
 

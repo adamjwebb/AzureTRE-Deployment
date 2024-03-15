@@ -13,50 +13,52 @@ variable "tre_resource_id" {
 }
 
 variable "avd_workspace_display_name" {
-type        = string
-description = "Name of the Azure Virtual Desktop workspace"
-default = "test display name"
+  type        = string
+  description = "Name of the Azure Virtual Desktop workspace"
 }
 
 variable "avd_workspace_description" {
-type        = string
-description = "Description of the Azure Virtual Desktop workspace"
-default = "test description"
+  type        = string
+  description = "Description of the Azure Virtual Desktop workspace"
 }
 
 variable "avd_hostpool_display_name" {
-type        = string
-description = "Name of the Azure Virtual Desktop workspace"
-default = "test display name"
+  type        = string
+  description = "Name of the Azure Virtual Desktop workspace"
 }
 
 variable "avd_hostpool_description" {
-type        = string
-description = "Description of the Azure Virtual Desktop hostpool"
-default = "test description"
+  type        = string
+  description = "Description of the Azure Virtual Desktop hostpool"
 }
 
 variable "avd_application_group_display_name" {
-type        = string
-description = "Name of the Azure Virtual Desktop application group"
-default = "test display name"
+  type        = string
+  description = "Name of the Azure Virtual Desktop application group"
 }
 
 variable "avd_application_group_description" {
-type        = string
-description = "Description of the Azure Virtual Desktop application group"
-default = "test description"
+  type        = string
+  description = "Description of the Azure Virtual Desktop application group"
 }
 
 variable "auth_tenant_id" {
   type        = string
   description = "Used to authenticate into the AAD Tenant to create the AAD App"
 }
+
 variable "auth_client_id" {
   type        = string
   description = "Used to authenticate into the AAD Tenant to create the AAD App"
 }
+
 variable "auth_client_secret" {
   type        = string
   description = "Used to authenticate into the AAD Tenant to create the AAD App"
+}
+
+variable "workspace_ad_group_naming_prefix" {
+  type        = string
+  description = "Prefix for Workspace Azure AD groups"
+  default     = "${local.workspace_resource_name_suffix} "
 }
