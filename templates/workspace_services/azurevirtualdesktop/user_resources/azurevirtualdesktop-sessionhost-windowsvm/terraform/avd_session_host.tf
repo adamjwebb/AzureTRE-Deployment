@@ -102,7 +102,7 @@ resource "azurerm_virtual_machine_extension" "avd-dsc" {
     "modulesUrl": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration_1.0.02566.260.zip",
     "configurationFunction": "Configuration.ps1\\AddSessionHost",
     "properties": {
-      "hostPoolName": "${data.azurerm_virtual_desktop_host_pool.avdhostpool.name}"
+      "hostPoolName":"${data.azurerm_virtual_desktop_host_pool.avdhostpool.name}",
       "AadJoin": true,
       "RegistrationInfoTokenCredential": {
         "UserName": "PLACEHOLDER_DO_NOT_USE",
