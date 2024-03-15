@@ -35,16 +35,16 @@ data "azurerm_role_definition" "virtual_machine_admin_login" {
 }
 
 data "azuread_group" "workspace_owners" {
-  display_name     = "${var.workspace_ad_group_naming_prefix}Workspace Owners"
+  display_name     = "${local.workspace_ad_group_naming_prefix}Workspace Owners"
   security_enabled = true
 }
 
 data "azuread_group" "workspace_researchers" {
-  display_name     = "${var.workspace_ad_group_naming_prefix}Workspace Researchers"
+  display_name     = "${local.workspace_ad_group_naming_prefix}Workspace Researchers"
   security_enabled = true
 }
 
 data "azuread_group" "workspace_airlock_managers" {
-  display_name     = "${var.workspace_ad_group_naming_prefix}Airlock Managers"
+  display_name     = "${local.workspace_ad_group_naming_prefix}Airlock Managers"
   security_enabled = true
 }
