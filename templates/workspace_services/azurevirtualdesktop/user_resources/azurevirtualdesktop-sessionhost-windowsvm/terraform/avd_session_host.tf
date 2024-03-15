@@ -96,22 +96,30 @@ resource "azurerm_virtual_machine_extension" "avd-dsc" {
   type                       = "DSC"
   type_handler_version       = "2.73"
   auto_upgrade_minor_version = true
-  settings                   = <<SETTINGS
-    {
-        "ModulesUrl": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration.zip",
-        "ConfigurationFunction" : "Configuration.ps1\\AddSessionHost",
-        "Properties": {
-            "hostPoolName": "${data.azurerm_virtual_desktop_host_pool.avdhostpool.name}"
-        }
+
+  settings = <<SETTINGS
+  {
+    "modulesUrl": "https://wvdportalstorageblob.blob.core.windows.net/galleryartifacts/Configuration_1.0.02566.260.zip",
+    "configurationFunction": "Configuration.ps1\\AddSessionHost",
+    "properties": {
+      "hostPoolName": "${data.azurerm_virtual_desktop_host_pool.avdhostpool.name}"
+      "AadJoin": true,
+      "RegistrationInfoTokenCredential": {
+        "UserName": "PLACEHOLDER_DO_NOT_USE",
+        "Password": "PrivateSettingsRef:RegistrationInfoToken"
+      },
+      "UseAgentDownloadEndpoint": true
     }
-    SETTINGS
-  protected_settings         = <<PROTECTED_SETTINGS
-    {
-      "properties" : {
-            "registrationInfoToken" : "${data.azurerm_key_vault_secret.avd_hostpool_registrationtoken.value}"
-        }
+  }
+  SETTINGS
+
+  protected_settings = <<PROTECTED_SETTINGS
+  {
+    "Items": {
+      "RegistrationInfoToken": "${data.azurerm_key_vault_secret.avd_hostpool_registrationtoken.value}"
     }
-    PROTECTED_SETTINGS
+  }
+  PROTECTED_SETTINGS
 
   lifecycle {
     ignore_changes = [settings, protected_settings, tags]

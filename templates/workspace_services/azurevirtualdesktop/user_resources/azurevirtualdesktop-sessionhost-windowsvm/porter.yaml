@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-avd-windowsvm
-version: 0.1.37
+version: 0.1.38
 description: "Azure Virtual Desktop"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
