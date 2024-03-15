@@ -41,7 +41,7 @@ locals {
   service_resource_name_suffix                  = "${local.short_workspace_id}svc${local.short_service_id}"
   core_resource_group_name                      = "rg-${var.tre_id}"
   avd_hostpool_name                             = lower("vdpool-${substr(local.workspace_resource_name_suffix, -20, -1)}")
-  avd_sessionhost_name                        = lower("vdvmws${local.short_workspace_id}")
+  avd_sessionhost_name                        = lower("vdvmws${local.short_workspace_id}-01")
   avd_hostpool_registrationinfo_expiration_date = timeadd(timestamp(), "720h")
   tre_workspace_service_tags = {
     tre_id                   = var.tre_id
