@@ -43,8 +43,8 @@ custom:
         version: latest
       conda_config: true
     # For information on using custom images, see README.me in the bastion/user-resources folder
-    # "Custom Image From Gallery":
-    #   source_image_name: your-image
+    "Custom Image From Gallery":
+      source_image_name: aw-cace-tre-avdimage
     #   conda_config: true
 
 credentials:
