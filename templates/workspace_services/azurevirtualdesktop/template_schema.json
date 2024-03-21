@@ -10,5 +10,41 @@
     "WorkspaceResearcher"
   ],
   "properties": {
+  },
+  "pipeline": {
+    "install": [
+      {
+        "stepId": "main"
+      },
+      {
+        "stepId": "4ad933bd-305a-4ba7-a3e1-7325b75b7f20",
+        "stepTitle": "Add network firewall rules for Azure Virtual Desktop host pool",
+        "resourceTemplateName": "tre-shared-service-firewall",
+        "resourceType": "shared-service",
+        "resourceAction": "upgrade",
+        "properties": [
+          {
+            "name": "network_rule_collections",
+            "type": "array",
+            "arraySubstitutionAction": "replace",
+            "arrayMatchField": "name",
+            "value": {
+              "name": "nrc_svc_{{ resource.id }}_azure_virtual_desktop",
+              "action": "Allow",
+              "rules": [
+                {
+                  "name": "AzureAD",
+                  "description": "AAD access",
+                  "source_addresses": "{{ resource.properties.workspace_address_space }}",
+                  "destination_addresses": ["AzureActiveDirectory"],
+                  "destination_ports": ["*"],
+                  "protocols": ["TCP"]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
   }
 }
