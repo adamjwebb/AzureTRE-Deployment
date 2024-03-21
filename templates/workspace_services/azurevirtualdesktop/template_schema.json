@@ -29,13 +29,13 @@
             "arraySubstitutionAction": "replace",
             "arrayMatchField": "name",
             "value": {
-              "name": "nrc_svc_{{ resource.id }}_guacamole",
+              "name": "nrc_svc_test_guacamole",
               "action": "Allow",
               "rules": [
                 {
                   "name": "AzureAD",
                   "description": "AAD access for authNZ",
-                  "source_addresses": "{{ resource.properties.web_apps_addresses }}",
+                  "source_addresses": "10.0.0.0",
                   "destination_addresses": [
                     "AzureActiveDirectory"
                   ],
