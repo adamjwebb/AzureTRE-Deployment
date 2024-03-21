@@ -35,7 +35,7 @@
                 {
                   "name": "AzureAD",
                   "description": "AAD access for authNZ",
-                  "source_addresses": "10.0.0.0",
+                  "source_addresses": ["10.0.0.0"],
                   "destination_addresses": [
                     "AzureActiveDirectory"
                   ],
