@@ -17,8 +17,8 @@
         "stepId": "main"
       },
       {
-        "stepId": "4ad933bd-305a-4ba7-a3e1-7325b75b7f20",
-        "stepTitle": "Add network firewall rules for Azure Virtual Desktop host pool",
+        "stepId": "4843f242-b451-42f9-a22d-2b7241354405",
+        "stepTitle": "Add network firewall rules for guacamole",
         "resourceTemplateName": "tre-shared-service-firewall",
         "resourceType": "shared-service",
         "resourceAction": "upgrade",
@@ -29,16 +29,22 @@
             "arraySubstitutionAction": "replace",
             "arrayMatchField": "name",
             "value": {
-              "name": "nrc_svc_{{ resource.id }}_azure_virtual_desktop",
+              "name": "nrc_svc_{{ resource.id }}_guacamole",
               "action": "Allow",
               "rules": [
                 {
                   "name": "AzureAD",
-                  "description": "AAD access",
-                  "source_addresses": "{{ resource.properties.workspace_address_space }}",
-                  "destination_addresses": ["AzureActiveDirectory"],
-                  "destination_ports": ["*"],
-                  "protocols": ["TCP"]
+                  "description": "AAD access for authNZ",
+                  "source_addresses": "{{ resource.properties.web_apps_addresses }}",
+                  "destination_addresses": [
+                    "AzureActiveDirectory"
+                  ],
+                  "destination_ports": [
+                    "*"
+                  ],
+                  "protocols": [
+                    "TCP"
+                  ]
                 }
               ]
             }
