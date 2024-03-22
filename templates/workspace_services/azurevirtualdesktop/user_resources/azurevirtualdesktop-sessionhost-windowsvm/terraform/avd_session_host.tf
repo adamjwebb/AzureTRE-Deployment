@@ -12,7 +12,7 @@ resource "random_password" "avd_sessionhost_local_password" {
 }
 
 resource "azurerm_network_interface" "avd_vm_nic" {
-  name                = "avd_vm_nic-nic"
+  name                = "${local.avd_sessionhost_name}-nic"
   resource_group_name = data.azurerm_resource_group.ws.name
   location            = data.azurerm_resource_group.ws.location
 

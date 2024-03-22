@@ -29,18 +29,18 @@
             "arraySubstitutionAction": "replace",
             "arrayMatchField": "name",
             "value": {
-              "name": "nrc_svc_{{ resource.id }}_guacamole",
+              "name": "nrc_svc_{{ resource.workspace_id }}_{{ resource.id }}_avd",
               "action": "Allow",
               "rules": [
                 {
-                  "name": "AzureAD",
-                  "description": "AAD access for authNZ",
-                  "source_addresses": ["10.0.0.0"],
+                  "name": "Service traffic",
+                  "description": "Service traffic",
+                  "source_addresses": "{{ resource.properties.workspace_services_vnet_iprange }}",
                   "destination_addresses": [
-                    "AzureActiveDirectory"
+                    "WindowsVirtualDesktop"
                   ],
                   "destination_ports": [
-                    "*"
+                    "443"
                   ],
                   "protocols": [
                     "TCP"

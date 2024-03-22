@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-avd
-version: 0.1.44
+version: 0.1.45
 description: "Azure Virtual Desktop Host Pool"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -75,6 +75,14 @@ parameters:
     env: WORKSPACE_AD_GROUP_NAMING_PREFIX
     default: ""
 
+outputs:
+  - name: workspace_services_vnet_iprange
+    type: string
+    applyTo:
+      - install
+      - upgrade
+
+
 mixins:
   - terraform:
       clientVersion: 1.7.0
@@ -103,6 +111,8 @@ install:
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
         container_name: ${ bundle.parameters.tfstate_container_name }
         key: tre-service-avd-${ bundle.parameters.tre_id }
+      outputs:
+        - name: workspace_services_vnet_iprange
 
 upgrade:
   - terraform:
@@ -126,6 +136,8 @@ upgrade:
         storage_account_name: ${ bundle.parameters.tfstate_storage_account_name }
         container_name: ${ bundle.parameters.tfstate_container_name }
         key: tre-service-avd-${ bundle.parameters.tre_id }
+      outputs:
+        - name: workspace_services_vnet_iprange
 
 uninstall:
   - terraform:
