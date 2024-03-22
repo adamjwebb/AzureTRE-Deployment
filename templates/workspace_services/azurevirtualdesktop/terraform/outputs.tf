@@ -1,3 +1,3 @@
 output "workspace_services_vnet_iprange" {
-  value = data.azurerm_subnet.services.id
+  value = jsonencode(data.azurerm_subnet.services.address_prefixes)
 }
