@@ -29,13 +29,13 @@
             "arraySubstitutionAction": "replace",
             "arrayMatchField": "name",
             "value": {
-              "name": "nrc_svc_{{ resource.id }}_avd",
+              "name": "nrc_svc_test_avd",
               "action": "Allow",
               "rules": [
                 {
                   "name": "Service traffic",
                   "description": "Service traffic",
-                  "source_addresses": "{{ resource.properties.workspace_services_vnet_iprange }}",
+                  "source_addresses": ["10.0.0.0"],
                   "destination_addresses": [
                     "WindowsVirtualDesktop"
                   ],
