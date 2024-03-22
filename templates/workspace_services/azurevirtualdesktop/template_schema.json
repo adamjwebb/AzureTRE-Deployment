@@ -29,7 +29,7 @@
             "arraySubstitutionAction": "replace",
             "arrayMatchField": "name",
             "value": {
-              "name": "nrc_svc_{{ resource.workspace_id }}_{{ resource.id }}_avd",
+              "name": "nrc_svc_{{ resource.id }}_avd",
               "action": "Allow",
               "rules": [
                 {
