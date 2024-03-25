@@ -9,8 +9,7 @@
     "WorkspaceOwner",
     "WorkspaceResearcher"
   ],
-  "properties": {
-  },
+  "properties": {},
   "pipeline": {
     "install": [
       {
@@ -18,7 +17,7 @@
       },
       {
         "stepId": "4843f242-b451-42f9-a22d-2b7241354405",
-        "stepTitle": "Add network firewall rules for guacamole",
+        "stepTitle": "Add network firewall rules for Azure Virtual Desktop",
         "resourceTemplateName": "tre-shared-service-firewall",
         "resourceType": "shared-service",
         "resourceAction": "upgrade",
@@ -35,7 +34,9 @@
                 {
                   "name": "Service traffic",
                   "description": "Service traffic",
-                  "source_addresses": ["10.0.0.0"],
+                  "source_addresses": [
+                    "10.0.0.0"
+                  ],
                   "destination_addresses": [
                     "WindowsVirtualDesktop"
                   ],
@@ -50,6 +51,30 @@
             }
           }
         ]
+      }
+    ],
+    "upgrade": [],
+    "uninstall": [
+      {
+        "stepId": "484ad86e-ac4f-4bdc-b048-b8c69632fb0b",
+        "stepTitle": "Remove network firewall rules for Azure Virtual Desktop",
+        "resourceTemplateName": "tre-shared-service-firewall",
+        "resourceType": "shared-service",
+        "resourceAction": "upgrade",
+        "properties": [
+          {
+            "name": "network_rule_collections",
+            "type": "array",
+            "arraySubstitutionAction": "remove",
+            "arrayMatchField": "name",
+            "value": {
+              "name": "nrc_svc_test_avd"
+            }
+          }
+        ]
+      },
+      {
+        "stepId": "main"
       }
     ]
   }
