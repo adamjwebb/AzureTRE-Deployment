@@ -17,7 +17,7 @@
       },
       {
         "stepId": "4843f242-b451-42f9-a22d-2b7241354405",
-        "stepTitle": "Add network firewall rules for Azure Virtual Desktop",
+        "stepTitle": "Add network firewall rules for Azure Virtual Desktop host pool",
         "resourceTemplateName": "tre-shared-service-firewall",
         "resourceType": "shared-service",
         "resourceAction": "upgrade",
@@ -28,15 +28,13 @@
             "arraySubstitutionAction": "replace",
             "arrayMatchField": "name",
             "value": {
-              "name": "nrc_svc_test_avd",
+              "name": "nrc_svc_{{ resource.id }}_avd",
               "action": "Allow",
               "rules": [
                 {
                   "name": "Service traffic",
                   "description": "Service traffic",
-                  "source_addresses": [
-                    "10.0.0.0"
-                  ],
+                  "source_addresses": "{{ resource.properties.workspace_services_vnet_iprange }}",
                   "destination_addresses": [
                     "WindowsVirtualDesktop"
                   ],
@@ -68,7 +66,7 @@
             "arraySubstitutionAction": "remove",
             "arrayMatchField": "name",
             "value": {
-              "name": "nrc_svc_test_avd"
+              "name": "nrc_svc_{{ resource.id }}_avd"
             }
           }
         ]
