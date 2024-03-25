@@ -76,7 +76,7 @@ parameters:
     default: ""
 
 outputs:
-  - name: workspace_services_vnet_iprange
+  - name: workspace_services_snet_iprange
     type: string
     applyTo:
       - install
@@ -112,7 +112,7 @@ install:
         container_name: ${ bundle.parameters.tfstate_container_name }
         key: tre-service-avd-${ bundle.parameters.tre_id }
       outputs:
-        - name: workspace_services_vnet_iprange
+        - name: workspace_services_snet_iprange
 
 upgrade:
   - terraform:
@@ -137,7 +137,7 @@ upgrade:
         container_name: ${ bundle.parameters.tfstate_container_name }
         key: tre-service-avd-${ bundle.parameters.tre_id }
       outputs:
-        - name: workspace_services_vnet_iprange
+        - name: workspace_services_snet_iprange
 
 uninstall:
   - terraform:

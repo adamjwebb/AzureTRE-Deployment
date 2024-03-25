@@ -248,7 +248,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "avdrulecollectiongroup
       name = "Entra ID"
       protocols {
         type = "Http"
-        port = 80
+        port = 80 
       }
       protocols {
         type = "Https"
