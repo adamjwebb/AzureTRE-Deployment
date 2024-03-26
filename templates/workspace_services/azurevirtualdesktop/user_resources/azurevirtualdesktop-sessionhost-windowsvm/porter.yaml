@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-avd-windowsvm
-version: 0.1.47
+version: 0.1.48
 description: "Azure Virtual Desktop Session Host"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -14,18 +14,18 @@ custom:
     "8 CPU | 32GB RAM": Standard_D8s_v5
     "16 CPU | 64GB RAM": Standard_D16s_v5
   image_options:
-    "Windows 10":
+    "Windows 10 Enterprise Multi-Session":
       source_image_reference:
         publisher: MicrosoftWindowsDesktop
         offer: Windows-10
-        sku: win10-21h2-pro-g2
+        sku: win10-23h2-avd
         version: latest
       conda_config: false
-    "Windows 11":
+    "Windows 11 Enterprise Multi-Session":
       source_image_reference:
         publisher: microsoftwindowsdesktop
         offer: windows-11
-        sku: win11-22h2-avd
+        sku: win11-23h2-avd
         version: latest
       conda_config: false
     "Server 2019 Data Science VM":
@@ -68,7 +68,7 @@ credentials:
 parameters:
   - name: os_image
     type: string
-    default: "Windows 10"
+    default: "Windows 10 Enterprise Multi-Session"
   - name: vm_size
     type: string
     default: "2 CPU | 8GB RAM"
