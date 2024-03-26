@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-avd
-version: 0.1.52
+version: 0.1.53
 description: "Azure Virtual Desktop Host Pool"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
