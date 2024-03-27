@@ -3,7 +3,7 @@ resource "azurerm_virtual_desktop_workspace" "avd_workspace" {
   name                          = local.avd_workspace_name
   resource_group_name           = data.azurerm_resource_group.ws.name
   location                      = data.azurerm_resource_group.ws.location
-  friendly_name                 = var.avd_workspace_display_name
+  friendly_name                 = local.avd_workspace_friendly_name
   description                   = var.avd_workspace_description
   public_network_access_enabled = true
   tags                          = local.tre_workspace_service_tags
@@ -51,6 +51,7 @@ resource "azurerm_virtual_desktop_application_group" "avd_application_group" {
   location            = data.azurerm_resource_group.ws.location
   friendly_name       = var.avd_application_group_display_name
   description         = var.avd_application_group_description
+  default_desktop_display_name = "Azure Virtual Desktop"
   host_pool_id        = azurerm_virtual_desktop_host_pool.avd_hostpool.id
   type                = "Desktop"
   tags                = local.tre_workspace_service_tags

@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-avd-windowsvm
-version: 0.1.48
+version: 0.1.49
 description: "Azure Virtual Desktop Session Host"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
