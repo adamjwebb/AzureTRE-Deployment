@@ -20,7 +20,7 @@ resource "azurerm_virtual_desktop_host_pool" "avd_hostpool" {
   description              = var.avd_hostpool_description
   validate_environment     = false
   start_vm_on_connect      = false
-  custom_rdp_properties    = "audiocapturemode:i:1;audiomode:i:0;enablerdsaadauth:i:1;targetisaadjoined:i:1;enablecredsspsupport:i:1;redirectclipboard:i:0;redirectcomports:i:0;usbdevicestoredirect:s:;drivestoredirect:s:;"
+  custom_rdp_properties    = local.avd_hostpool_custom_rdp_properties
   type                     = "Pooled"
   maximum_sessions_allowed = 16
   load_balancer_type       = "DepthFirst" #[BreadthFirst DepthFirst]

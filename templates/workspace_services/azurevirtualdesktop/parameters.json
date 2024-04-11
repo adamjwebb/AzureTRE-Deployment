@@ -57,6 +57,12 @@
       "source": {
         "env": "WORKSPACE_AD_GROUP_NAMING_PREFIX"
       }
+    },
+    {
+      "name": "tre_portal_fqdns",
+      "source": {
+        "env": "TRE_PORTAL_FQDNS"
+      }
     }
   ]
 }
