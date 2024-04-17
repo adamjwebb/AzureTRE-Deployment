@@ -326,7 +326,7 @@
                   "name": "Access to AzureTRE portal",
                   "description": "Access to AzureTRE portal",
                   "source_addresses": "{{ resource.properties.workspace_services_snet_iprange }}",
-                  "target_fqdns": "{{ resource.tre_portal_fqdns }}",
+                  "target_fqdns": "{{ resource.properties.tre_portal_fqdns }}",
                   "protocols": [
                     {
                       "port": "443",

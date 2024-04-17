@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-avd
-version: 0.1.58
+version: 0.1.59
 description: "Azure Virtual Desktop Host Pool"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -74,10 +74,6 @@ parameters:
     description: "Prefix for Workspace Azure AD groups"
     env: WORKSPACE_AD_GROUP_NAMING_PREFIX
     default: ""
-  - name: tre_portal_fqdns
-    description: "TRE Portal FQDNs"
-    env: TRE_PORTAL_FQDNS
-    default: ""
 
 outputs:
   - name: workspace_services_snet_iprange
@@ -85,7 +81,11 @@ outputs:
     applyTo:
       - install
       - upgrade
-
+  - name: tre_portal_fqdns
+    type: string
+    applyTo:
+      - install
+      - upgrade
 
 mixins:
   - terraform:
@@ -117,6 +117,7 @@ install:
         key: tre-service-avd-${ bundle.parameters.tre_id }
       outputs:
         - name: workspace_services_snet_iprange
+        - name: tre_portal_fqdns
 
 upgrade:
   - terraform:
@@ -142,6 +143,7 @@ upgrade:
         key: tre-service-avd-${ bundle.parameters.tre_id }
       outputs:
         - name: workspace_services_snet_iprange
+        - name: tre_portal_fqdns
 
 uninstall:
   - terraform:

@@ -62,3 +62,10 @@ variable "workspace_ad_group_naming_prefix" {
   description = "Naming prefix for Workspace Azure AD groups"
   default     = ""
 }
+
+variable "tre_portal_fqdns" {
+  type        = string
+  description = "List of TRE Portal FQDNs"
+}
+
+
