@@ -3,5 +3,5 @@ output "workspace_services_snet_iprange" {
 }
 
 output "tre_portal_fqdns" {
-  value = jsonencode(var.tre_portal_fqdns)
+  value = jsonencode(local.tre_portal_fqdns_list)
 }
