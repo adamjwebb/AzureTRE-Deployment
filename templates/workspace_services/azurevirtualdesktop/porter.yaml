@@ -1,7 +1,7 @@
 ---
 schemaVersion: 1.0.0
 name: tre-service-avd
-version: 0.1.57
+version: 0.1.58
 description: "Azure Virtual Desktop Host Pool"
 dockerfile: Dockerfile.tmpl
 registry: azuretre
@@ -73,6 +73,10 @@ parameters:
   - name: workspace_ad_group_naming_prefix
     description: "Prefix for Workspace Azure AD groups"
     env: WORKSPACE_AD_GROUP_NAMING_PREFIX
+    default: ""
+  - name: tre_portal_fqdns
+    description: "TRE Portal FQDNs"
+    env: TRE_PORTAL_FQDNS
     default: ""
 
 outputs:
